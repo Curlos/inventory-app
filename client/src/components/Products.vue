@@ -1,14 +1,21 @@
 <template>
   <div class="productsContainer">
-    Products
+    <div :key="product.id" v-for="product in products">
+      <Product :product="product"/>
+    </div>
   </div>
 </template>
 
 <script>
+import Product from './Product'
+
 export default {
   name: 'Products',
-  data() {
-    
+  props: {
+    products: Array,
+  },
+  components: {
+    Product,
   }
 }
 </script>
