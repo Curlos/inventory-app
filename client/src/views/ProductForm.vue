@@ -1,42 +1,52 @@
 <template>
-  <form className="productFormContainer" @submit="handleFormSubmit">
-    <span class="formTitle">Add a new product</span>
-    <input type="text" placeholder="Name*" name="name" v-model="newProduct.name" @change="handleFormChange"/>
-    <select name="category" selected="newProduct.category" @change="handleFormChange">
-      <option value="selectCategory">Select category type</option>
-      <option value="Mac">Mac</option>
-      <option value="iPad">iPad</option>
-      <option value="iPhone">iPhone</option>
-      <option value="Watch">Watch</option>
-      <option value="TV">TV</option>
-      <option value="Music">Music</option>
-    </select>
-    <input type="text" placeholder="Price*" name="retailPrice" v-model="newProduct.retailPrice" @change="handleFormChange"/>
-    <input type="text" placeholder="Color" name="color" @change="handleFormChange"/>
-    <select name="capacity" selected="newProduct.capacity" @change="handleFormChange">
-      <option value="selectCapacity">Select capacity (if applicable)</option>
-      <option value="8GB">8GB</option>
-      <option value="16GB">16GB</option>
-      <option value="32GB">32GB</option>
-      <option value="64GB">64GB</option>
-      <option value="128GB">128GB</option>
-      <option value="256GB">256GB</option>
-      <option value="512GB">512GB</option>
-      <option value="1TB">1TB</option>
-      <option value="2TB">2TB</option>
-    </select>
-    <textarea placeholder="Product description" name="description" v-model="newProduct.description" @change="handleFormChange"></textarea>
-    <button type="submit" class="submitButton">Add new product</button>
-  </form>
+  <div className="pageContainer">
+    <form className="productFormContainer" @submit="handleFormSubmit">
+      <span class="formTitle">Add a new product</span>
+      <input type="text" placeholder="Name*" name="name" v-model="newProduct.name" @change="handleFormChange"/>
+      <select name="category" selected="newProduct.category" @change="handleFormChange">
+        <option value="selectCategory">Select category type</option>
+        <option value="Mac">Mac</option>
+        <option value="iPad">iPad</option>
+        <option value="iPhone">iPhone</option>
+        <option value="Watch">Watch</option>
+        <option value="TV">TV</option>
+        <option value="Music">Music</option>
+      </select>
+      <input type="number" placeholder="Price*" name="retailPrice" v-model="newProduct.retailPrice" @change="handleFormChange"/>
+      <input type="text" placeholder="Color" name="color" @change="handleFormChange"/>
+      <select name="capacity" selected="newProduct.capacity" @change="handleFormChange">
+        <option value="selectCapacity">Select capacity (if applicable)</option>
+        <option value="8GB">8GB</option>
+        <option value="16GB">16GB</option>
+        <option value="32GB">32GB</option>
+        <option value="64GB">64GB</option>
+        <option value="128GB">128GB</option>
+        <option value="256GB">256GB</option>
+        <option value="512GB">512GB</option>
+        <option value="1TB">1TB</option>
+        <option value="2TB">2TB</option>
+      </select>
+      <input type="text" placeholder="Release Year" name="releaseYear" @change="handleFormChange"/>
+      <textarea placeholder="Product description" name="description" v-model="newProduct.description" @change="handleFormChange"></textarea>
+      <input type="text" placeholder="Image URL" name="imageURL" v-model="newProduct.imageURL" @change="handleFormChange"/>
+      <button type="submit" class="submitButton">Add new product</button>
+    </form>
+
+    <ProductPage :product="newProduct"/>
+  </div>
 </template> 
 
 <script>
 import axios from 'axios'
+import ProductPage from './ProductPage'
 
 export default {
   name: 'ProductForm',
   props: {
     product: Object,
+  },
+  components: {
+    ProductPage,
   },
   data() {
     return {
@@ -46,9 +56,11 @@ export default {
         name: '',
         category: 'Select category type',
         retailPrice: '',
+        releaseYear: '',
         color: '',
         capacity: 'Select capacity (if applicable)',
-        description: ''
+        description: '',
+        imageURL: '',
       },
     }
   },
@@ -58,14 +70,20 @@ export default {
       console.log('submitted')
       const data = await this.addProduct()
 
-      console.log(data)
-      this.newProduct = {
-        name: '',
-        category: 'Select category type',
-        retailPrice: '',
-        color: '',
-        capacity: 'Select capacity (if applicable)',
-        description: ''
+      if (data) {
+        console.log(data)
+        this.newProduct = {
+          name: '',
+          category: 'Select category type',
+          retailPrice: '',
+          releaseYear: '',
+          color: '',
+          capacity: 'Select capacity (if applicable)',
+          description: '',
+          imageURL: '',
+        }
+      } else {
+        console.log('something went wrong')
       }
     },
     handleFormChange(e) {
@@ -81,6 +99,10 @@ export default {
       return data
     },
     async addProduct() {
+      if (this.newProduct.capacity === 'Select capacity (if applicable)' || this.newProduct.capacity === 'selectCapacity' || this.newProduct.category === 'Select category type' || this.newProduct.category === 'selectCategory') {
+        console.log('FUCK')
+        return false
+      }
       const body = {...this.newProduct}
       const res = await axios.post(this.API_BASE_URL + `/add`, body)
       const data = res.data
@@ -92,6 +114,10 @@ export default {
 </script>
 
 <style scoped>
+  .pageContainer {
+    display: flex;
+    justify-content: space-around;
+  }
   .formTitle {
     font-size: 30px;
   }
@@ -103,7 +129,7 @@ export default {
     margin: 40px;
     box-sizing: border-box;
   }
-  form input[type="text"], select, textarea {
+  input, select, textarea {
     font-size: 20px;
     border: 2px solid lightgray;
     padding: 10px;

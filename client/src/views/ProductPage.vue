@@ -1,12 +1,14 @@
 <template>
   <div className="productContainer">
     <div className="productDetails">
-      <img v-bind:src="productObj.imageURL || 'https://upload.wikimedia.org/wikipedia/commons/8/84/Apple_Computer_Logo_rainbow.svg'" alt="Apple Logo" />
+      <img v-bind:src="productObj.imageURL || product && product.imageURL || 'https://upload.wikimedia.org/wikipedia/commons/8/84/Apple_Computer_Logo_rainbow.svg'" alt="Apple Logo" />
       <div className="productInfo">
-        <div className="productName">{{ productObj.name}}</div>
-        <div>${{ productObj.retailPrice}}</div>
-        <div>{{ productObj.color}}</div>
-        <div>{{ productObj.capacity}}</div>
+        <div className="productName">{{ product && product.name || productObj.name}}</div>
+        <div><span class="productInfoTitle">Price:</span> ${{ productObj.retailPrice || product && product.retailPrice}}</div>
+        <div><span class="productInfoTitle">Color:</span> {{ productObj.color || product && product.color}}</div>
+        <div><span class="productInfoTitle">Capacity:</span> {{ productObj.capacity || product && product.capacity}}</div>
+        <div><span class="productInfoTitle">Release Year:</span> {{ productObj.releaseYear || product && product.releaseYear}}</div>
+        <div>{{ productObj.description || product && product.description}}</div>
       </div>
     </div>
   </div>
@@ -33,12 +35,20 @@ export default {
       const data = res.data
       return data
     },
+    async deleteProduct(id) {
+      const res = await axios.delete(this.API_BASE_URL + `/product/${id}`)
+      console.log(res)
+      const data = res.data
+      return data
+    }
   },
   async created() {
-    const id = this.$route.params.id
-    const newProduct = await this.fetchProductByID(id)
-    console.log(newProduct)
-    this.productObj = newProduct
+    if(this.$route.params.id) {
+      const id = this.$route.params.id
+      const newProduct = await this.fetchProductByID(id)
+      console.log(newProduct)
+      this.productObj = newProduct
+    }
   }
 }
 </script>
@@ -66,10 +76,16 @@ export default {
     align-items: center;
     padding: 50px;
     font-size: 20px;
+    max-width: 300px;
+    text-align: center;
+  }
+
+  .productInfoTitle {
+    font-weight: 600;
   }
 
   .productName {
-    font-size: 23px;
+    font-size: 30px;
     font-weight: 900;
   }
 </style>

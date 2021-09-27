@@ -2,7 +2,7 @@
   <div class="productContainer">
     <router-link :to="'/product/' + product._id" >
       <img v-bind:src="product.imageURL || 'https://upload.wikimedia.org/wikipedia/commons/8/84/Apple_Computer_Logo_rainbow.svg'" alt="Apple Logo" />
-      <div>{{ product.name }}</div>
+      <div class="productName">{{ product.name }}</div>
       <div>${{ product.retailPrice }}</div>
       <div>{{ product.color }}</div>
       <div>{{ product.capacity }}</div>
@@ -35,6 +35,10 @@ export default {
 
   .productContainer img {
     height: 200px;
+  }
+
+  .productName {
+    font-weight: 600;
   }
 
   a {
