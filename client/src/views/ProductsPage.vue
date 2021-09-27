@@ -27,6 +27,12 @@ export default {
       console.log(res.data)
       const data = res.data
       return data
+    },
+    async fetchProductByID(id) {
+      const res = await axios.get(this.API_BASE_URL + `/product/${id}`)
+      console.log(res)
+      const data = res.data
+      return data
     }
   },
   async created() {

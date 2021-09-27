@@ -21,4 +21,10 @@ export default {
 </script>
 
 <style scoped>
+
+.productsContainer {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
 </style>
