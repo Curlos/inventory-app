@@ -1,7 +1,12 @@
 <template>
   <div class="productContainer">
-    <img src="getImageSrc" alt="Apple Logo" />
-    {{ product.name }}
+    <router-link :to="'/product/' + product._id" >
+      <img v-bind:src="product.imageURL || 'https://upload.wikimedia.org/wikipedia/commons/8/84/Apple_Computer_Logo_rainbow.svg'" alt="Apple Logo" />
+      <div>{{ product.name }}</div>
+      <div>${{ product.retailPrice }}</div>
+      <div>{{ product.color }}</div>
+      <div>{{ product.capacity }}</div>
+    </router-link>
   </div>
 </template>
 
@@ -11,11 +16,6 @@ export default {
   props: {
     product: Object,
   },
-  computed: {
-    getImageSrc() {
-      return this.product.img ? this.product.img : 'https://commons.wikimedia.org/wiki/File:Apple_Computer_Logo_rainbow.svg'
-    }
-  }
 }
 </script>
 
@@ -23,5 +23,22 @@ export default {
 
   .productContainer {
     display: flex;
+    align-items: center;
+    text-align: center;
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px;
+    height: 300px;
+    box-shadow: 0 8px 8px -4px gray;
+  }
+
+  .productContainer img {
+    height: 200px;
+  }
+
+  a {
+    text-decoration: none;
+    color: black;
   }
 </style>
