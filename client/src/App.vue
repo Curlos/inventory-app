@@ -21,7 +21,12 @@ export default {
 body {
     margin: 0;
     padding: 0;
-    background-color: #e7e7e7;
+    background-color: #ffffff;
+    height: 100%;
+}
+.container {
+  width: 100%;
+  height: 100%;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

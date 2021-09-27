@@ -6,13 +6,21 @@ const routes = [
   {
     path: "/product/:id",
     name: "ProductPage",
-    component: ProductPage
+    component: ProductPage,
+    props: true
+  },
+  {
+    path: "/category/:name",
+    name: "ProductsPage",
+    component: ProductsPage,
+    props: true
   },
   {
     path: "/",
     name: "ProductsPage",
-    component: ProductsPage
-  }
+    component: ProductsPage,
+    props: true
+  },
 ];
 
 const router = createRouter({
