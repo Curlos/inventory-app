@@ -9,6 +9,7 @@ const productSchema = new mongoose.Schema(
     capacity: {type: String},
     color: {type: String},
     imageURL: {type: String},
+    description: {type: String},
   }
 )
 

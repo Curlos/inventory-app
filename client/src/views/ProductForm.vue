@@ -1,8 +1,8 @@
 <template>
   <form className="productFormContainer" @submit="handleFormSubmit">
     <span class="formTitle">Add a new product</span>
-    <input type="text" placeholder="Name*"/>
-    <select name="categories">
+    <input type="text" placeholder="Name*" name="name" v-model="newProduct.name" @change="handleFormChange"/>
+    <select name="category" selected="newProduct.category" @change="handleFormChange">
       <option value="selectCategory">Select category type</option>
       <option value="Mac">Mac</option>
       <option value="iPad">iPad</option>
@@ -11,10 +11,10 @@
       <option value="TV">TV</option>
       <option value="Music">Music</option>
     </select>
-    <input type="text" placeholder="Price*"/>
-    <input type="text" placeholder="Color"/>
-    <select name="capacitySizes">
-      <option value="selectCategory">Select capacity (if applicable)</option>
+    <input type="text" placeholder="Price*" name="retailPrice" v-model="newProduct.retailPrice" @change="handleFormChange"/>
+    <input type="text" placeholder="Color" name="color" @change="handleFormChange"/>
+    <select name="capacity" selected="newProduct.capacity" @change="handleFormChange">
+      <option value="selectCapacity">Select capacity (if applicable)</option>
       <option value="8GB">8GB</option>
       <option value="16GB">16GB</option>
       <option value="32GB">32GB</option>
@@ -25,7 +25,7 @@
       <option value="1TB">1TB</option>
       <option value="2TB">2TB</option>
     </select>
-    <textarea placeholder="Product description"></textarea>
+    <textarea placeholder="Product description" name="description" v-model="newProduct.description" @change="handleFormChange"></textarea>
     <button type="submit" class="submitButton">Add new product</button>
   </form>
 </template> 
@@ -41,13 +41,38 @@ export default {
   data() {
     return {
       productObj: Object,
-      API_BASE_URL: 'http://localhost:8888/products'
+      API_BASE_URL: 'http://localhost:8888/products',
+      newProduct: {
+        name: '',
+        category: 'Select category type',
+        retailPrice: '',
+        color: '',
+        capacity: 'Select capacity (if applicable)',
+        description: ''
+      },
     }
   },
   methods: {
-    handleFormSubmit(e) {
+    async handleFormSubmit(e) {
       e.preventDefault()
       console.log('submitted')
+      const data = await this.addProduct()
+
+      console.log(data)
+      this.newProduct = {
+        name: '',
+        category: 'Select category type',
+        retailPrice: '',
+        color: '',
+        capacity: 'Select capacity (if applicable)',
+        description: ''
+      }
+    },
+    handleFormChange(e) {
+      const productKey = e.target.name
+      const productValue = e.target.value
+      this.newProduct[productKey] = productValue
+      console.log(this.newProduct)
     },
     async fetchProductByID(id) {
       const res = await axios.get(this.API_BASE_URL + `/product/${id}`)
@@ -55,13 +80,14 @@ export default {
       const data = res.data
       return data
     },
+    async addProduct() {
+      const body = {...this.newProduct}
+      const res = await axios.post(this.API_BASE_URL + `/add`, body)
+      const data = res.data
+      return data
+    }
   },
-  async created() {
-    const id = this.$route.params.id
-    const newProduct = await this.fetchProductByID(id)
-    console.log(newProduct)
-    this.productObj = newProduct
-  }
+
 }
 </script>
 
@@ -107,5 +133,9 @@ export default {
     border-radius: 15px;
     padding: 15px;
     width: 384px;
+
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 </style>
