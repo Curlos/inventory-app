@@ -4,7 +4,7 @@ import ProductsPage from "../views/ProductsPage";
 
 const routes = [
   {
-    path: "/product",
+    path: "/product/:id",
     name: "ProductPage",
     component: ProductPage
   },

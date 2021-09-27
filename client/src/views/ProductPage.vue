@@ -1,13 +1,11 @@
 <template>
-  <div>ProducT</div>
+  <div>
+    one product
+  </div>
 </template>
 
 <script>
-export default {
-  name: 'ProductPage',
-
-}
 </script>
 
-<style>
+<style scoped>
 </style>
