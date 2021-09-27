@@ -11,16 +11,6 @@
       <router-link to="/category/tv" exact>TV</router-link>
       <router-link to="/category/music" exact>Music</router-link>
     </div>
-
-    <div class="searchAndAdd">
-      <div>
-        <input type="text"/>
-        <i class="fas fa-search"></i>
-      </div>
-      <router-link to="/add-product">
-        <button>Add a product</button>
-      </router-link>
-    </div>
   </div>
 </template>
 
@@ -49,45 +39,6 @@ export default {
     padding: 0;
     margin: 0;
     max-height: 44px;
-  }
-
-  .searchAndAdd {
-    display: flex;
-    justify-content: space-around;
-    margin: 10px;
-  }
-
-  .searchAndAdd input[type="text"] {
-    padding: 10px;
-    border: 2px solid lightgray;
-    border-right: none;
-    border-radius: 10px;
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px;
-    outline: none;
-    width: 300px;
-  }
-
-  .searchAndAdd button {
-    color: white;
-    background-color: #0077ED;
-    border: none;
-    border-radius: 20px;
-    padding: 10px;
-  }
-  .searchAndAdd button:hover {
-    background-color: #005fbe;
-    cursor: pointer;
-  }
-
-  i {
-    color: black;
-    padding: 8px 10px 11px 10px;
-    border: 2px solid lightgray;
-    border-left: none;
-    border-radius: 10px;
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
   }
 
 </style>
