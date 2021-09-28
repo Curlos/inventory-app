@@ -1,14 +1,22 @@
 <template>
   <div className="productContainer">
     <div className="productDetails">
-      <img v-bind:src="productObj.imageURL || product && product.imageURL || 'https://upload.wikimedia.org/wikipedia/commons/8/84/Apple_Computer_Logo_rainbow.svg'" alt="Apple Logo" />
+      <img v-bind:src="product && product.imageURL || productObj.imageURL || 'https://upload.wikimedia.org/wikipedia/commons/8/84/Apple_Computer_Logo_rainbow.svg'" alt="Apple Logo" />
       <div className="productInfo">
         <div className="productName">{{ product && product.name || productObj.name}}</div>
-        <div><span class="productInfoTitle">Price:</span> ${{ productObj.retailPrice || product && product.retailPrice}}</div>
-        <div><span class="productInfoTitle">Color:</span> {{ productObj.color || product && product.color}}</div>
-        <div><span class="productInfoTitle">Capacity:</span> {{ productObj.capacity || product && product.capacity}}</div>
-        <div><span class="productInfoTitle">Release Year:</span> {{ productObj.releaseYear || product && product.releaseYear}}</div>
-        <div>{{ productObj.description || product && product.description}}</div>
+        <div><span class="productInfoTitle">Price:</span> ${{ product && product.retailPrice || productObj.retailPrice }}</div>
+        <div><span class="productInfoTitle">Color:</span> {{ product && product.color || productObj.color }}</div>
+        <div><span class="productInfoTitle">Capacity:</span> {{ product && product.capacity || productObj.capacity }}</div>
+        <div><span class="productInfoTitle">Release Year:</span> {{ product && product.releaseYear || productObj.releaseYear }}</div>
+        <div>{{ product && product.description || productObj.description }}</div>
+
+        <div v-if="!product">
+          <router-link :to="'/edit-product/' + productObj._id || product._id" exact>
+            <button>Update info</button>
+          </router-link>
+          
+          <button class="deleteButton" @click="handleDelete">Remove product</button>
+        </div>
       </div>
     </div>
   </div>
@@ -29,6 +37,13 @@ export default {
     }
   },
   methods: {
+    async handleDelete() {
+      const id = this.productObj._id
+      const data = await this.deleteProduct(id)
+      console.log(data)
+      this.$router.push('/')
+      return data
+    },
     async fetchProductByID(id) {
       const res = await axios.get(this.API_BASE_URL + `/product/${id}`)
       console.log(res)
@@ -87,5 +102,24 @@ export default {
   .productName {
     font-size: 30px;
     font-weight: 900;
+  }
+  button {
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    background-color: #0072e4;
+    border: none;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px;
+    cursor: pointer;
+
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .deleteButton {
+    background-color: #e40f00;
   }
 </style>
