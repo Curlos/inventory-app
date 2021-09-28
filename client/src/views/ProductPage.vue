@@ -5,10 +5,10 @@
         <img v-bind:src="product && product.imageURL || productObj.imageURL || 'https://upload.wikimedia.org/wikipedia/commons/8/84/Apple_Computer_Logo_rainbow.svg'" alt="Apple Logo" />
       </div>
       <div className="productInfo">
-        <div v-if="product && product.name || productObj.name" className="productName">{{ product && product.name || productObj.name}}</div>
+        <div v-if="product && product.name && product.name !== 'Object' || productObj.name !== 'Object' && productObj.name" className="productName">{{ product && product.name || productObj.name}}</div>
         <div v-if="product && product.retailPrice || productObj.retailPrice"><span class="productInfoTitle">Price:</span> ${{ product && product.retailPrice || productObj.retailPrice }}</div>
         <div v-if="product && product.color || productObj.color"><span class="productInfoTitle">Color:</span> {{ product && product.color || productObj.color }}</div>
-        <div v-if="product && product.capacity || productObj.capacity"><span class="productInfoTitle">Capacity:</span> {{ product && product.capacity || productObj.capacity }}</div>
+        <div v-if="product && product.capacity && product.capacity !== 'Select capacity (if applicable)' && product.capacity !== 'selectCapacity' || productObj.capacity"><span class="productInfoTitle">Capacity:</span> {{ product && product.capacity || productObj.capacity }}</div>
 
         <div v-if="product && product.releaseYear || productObj.releaseYear"><span class="productInfoTitle">Release Year:</span> {{ product && product.releaseYear || productObj.releaseYear }}</div>
 

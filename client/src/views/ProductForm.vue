@@ -146,6 +146,7 @@ export default {
   .pageContainer {
     display: flex;
     justify-content: space-around;
+    flex-wrap: wrap;
   }
   .formTitle {
     font-size: 30px;
@@ -153,7 +154,7 @@ export default {
   form {
     display: flex;
     justify-content: flex-start;
-    align-items: flex-start;
+    align-items: center;
     flex-direction: column;
     margin: 40px;
     box-sizing: border-box;
@@ -193,5 +194,35 @@ export default {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  @media (max-width: 450px) {
+    input, select, textarea {
+      width: 260px;
+    }
+
+    select, .submitButton {
+      width: 284px;
+    }
+  }
+
+  @media (min-width: 700px) and (min-height: 900px) {
+    input, select, textarea {
+      width: 650px;
+    }
+
+    select, .submitButton {
+      width: 674px;
+    }
+  }
+
+  @media (min-width: 1000px) and (min-height: 1366px) {
+    input, select, textarea {
+      width: 900px;
+    }
+
+    select, .submitButton {
+      width: 924px;
+    }
   }
 </style>
