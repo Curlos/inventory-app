@@ -2,14 +2,14 @@
   <div>
     <div class="searchAndAdd">
       <div>
-        <input type="text"/>
-        <i class="fas fa-search"></i>
+        <input type="text" v-model="searchText" @change="handleSearchChange"/>
+        <i class="fas fa-search" @click="handleSearchChange"></i>
       </div>
-      <router-link to="/add-product">
+      <router-link to="/add-product" exact>
         <button>Add a product</button>
       </router-link>
     </div>
-    <Products :products="products"/>
+    <Products :products="this.filteredProducts"/>
     
   </div>
 </template>
@@ -26,10 +26,35 @@ export default {
   data() {
     return {
       products: [],
+      filteredProducts: [],
+      searchText: '',
       API_BASE_URL: 'http://localhost:8888/products'
     }
   },
   methods: {
+    handleSearchChange() {
+      const newFilteredProducts = this.products.filter((product) => {
+        for (let key of Object.keys(product)) {
+          console.log(product[key])
+          if (typeof product[key] === 'number') {
+            if (product[key] === (Number(this.searchText))) {
+              return true
+            }
+          } else if (typeof product[key] === 'string') {
+            if (product[key].toLowerCase().includes(this.searchText.toLowerCase())) {
+              return true
+            }
+          }
+        }
+
+        return false
+      })
+
+      this.filteredProducts = newFilteredProducts
+
+      console.log(newFilteredProducts)
+      
+    },
     async fetchProducts() {
       const res = await axios.get(this.API_BASE_URL)
       console.log(res)
@@ -46,6 +71,7 @@ export default {
   },
   async created() {
     this.products = await this.fetchProducts()
+    this.filteredProducts = [...this.products]
   },
 }
 </script>
