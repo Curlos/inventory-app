@@ -76,6 +76,8 @@ export default {
         const categoryType = this.$route.params.category
         const newFilteredProducts = this.products.filter((product) => product.category.toLowerCase() === categoryType.toLowerCase())
         this.filteredProducts = newFilteredProducts
+      } else {
+        this.filteredProducts = this.products
       }
     }
   },
