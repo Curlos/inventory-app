@@ -1,6 +1,7 @@
 <template>
   <div className="pageContainer">
-    <form className="productFormContainer">
+    <div v-if="loading" class="loader"></div>
+    <form v-if="!loading" className="productFormContainer">
       <span class="formTitle" v-if="!this.$route.params.id">Add a new product</span>
       <span class="formTitle" v-if="this.$route.params.id">Edit product</span>
       <input type="text" placeholder="Name*" name="name" v-model="newProduct.name" @change="handleFormChange"/>
@@ -26,7 +27,7 @@
       <button @click="handleEditProduct" class="submitButton" v-if="this.$route.params.id">Edit product</button>
     </form>
 
-    <ProductPage :product="newProduct"/>
+    <ProductPage v-if="!loading" :product="newProduct"/>
   </div>
 </template> 
 
@@ -58,6 +59,7 @@ export default {
         description: '',
         imageURL: '',
       },
+      loading: false,
     }
   },
   methods: {
@@ -118,15 +120,16 @@ export default {
     },
     async fetchProductByID(id) {
       const res = await axios.get(this.API_BASE_URL + `/product/${id}`)
-      console.log(res)
       const data = res.data
       return data
     },
     async editProduct(id) {
+      this.loading = true
       const body = {...this.newProduct}
       console.log(this.API_BASE_URL + `/product/${id}`)
       const res = await axios.put(this.API_BASE_URL + `/product/${id}`, body)
       const data = res.data
+      this.loading = false
       return data
     }
   },

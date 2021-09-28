@@ -9,7 +9,8 @@
         <button>Add a product</button>
       </router-link>
     </div>
-    <Products :products="this.filteredProducts"/>
+    <div v-if="loading" class="loader"></div>
+    <Products v-if="!loading" :products="this.filteredProducts"/>
     
   </div>
 </template>
@@ -28,6 +29,7 @@ export default {
       products: [],
       filteredProducts: [],
       searchText: '',
+      loading: false,
       API_BASE_URL: 'https://inventory-app-server-1232131.herokuapp.com/products'
     }
   },
@@ -65,10 +67,12 @@ export default {
       }
     },
     async fetchProducts() {
+      this.loading = true
       const res = await axios.get(this.API_BASE_URL)
       console.log(res)
       console.log(res.data)
       const data = res.data
+      this.loading = false
       return data
     },
     async fetchProductByID(id) {
@@ -81,6 +85,7 @@ export default {
   watch: {
     $route() {
       console.log(this.$route.params)
+      this.searchText = ''
       this.filterByCategory()
     }
   },
@@ -137,6 +142,7 @@ export default {
     border-radius: 10px;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
+    cursor: pointer;
   }
 
   @media (max-width: 450px) {

@@ -1,6 +1,7 @@
 <template>
   <div className="productContainer">
-    <div className="productDetails">
+    <div v-if="loading" class="loader"></div>
+    <div v-if="!loading" className="productDetails">
       <div>
         <img v-bind:src="product && product.imageURL || productObj.imageURL || 'https://upload.wikimedia.org/wikipedia/commons/8/84/Apple_Computer_Logo_rainbow.svg'" alt="Apple Logo" />
       </div>
@@ -37,14 +38,17 @@ export default {
   data() {
     return {
       productObj: Object,
-      API_BASE_URL: 'https://inventory-app-server-1232131.herokuapp.com/products'
+      API_BASE_URL: 'https://inventory-app-server-1232131.herokuapp.com/products',
+      loading: false,
     }
   },
   methods: {
     async handleDelete() {
+      this.loading = true
       const id = this.productObj._id
       const data = await this.deleteProduct(id)
       console.log(data)
+      this.loading = false
       this.$router.push('/')
       return data
     },
@@ -63,10 +67,12 @@ export default {
   },
   async created() {
     if(this.$route.params.id) {
+      this.loading = true
       const id = this.$route.params.id
       const newProduct = await this.fetchProductByID(id)
       console.log(newProduct)
       this.productObj = newProduct
+      this.loading = false
     }
   }
 }
