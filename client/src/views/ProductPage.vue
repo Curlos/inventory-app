@@ -37,7 +37,7 @@ export default {
   data() {
     return {
       productObj: Object,
-      API_BASE_URL: 'http://localhost:8888/products'
+      API_BASE_URL: 'https://inventory-app-server-1232131.herokuapp.com/products'
     }
   },
   methods: {

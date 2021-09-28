@@ -47,7 +47,7 @@ export default {
       productObj: Object,
       categoryValues: ['Mac', 'iPad', 'iPhone', 'Watch', 'TV', 'Music'],
       capacityValues: ['8GB', '16GB', '32GB', '64GB', '128GB', '256GB', '512GB', '1TB', '2TB'],
-      API_BASE_URL: 'http://localhost:8888/products',
+      API_BASE_URL: 'https://inventory-app-server-1232131.herokuapp.com/products',
       newProduct: {
         name: '',
         category: 'Select category type',
