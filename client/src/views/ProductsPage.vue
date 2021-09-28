@@ -69,6 +69,16 @@ export default {
       return data
     }
   },
+  watch: {
+    $route() {
+      console.log(this.$route.params)
+      if (this.$route.params.category) {
+        const categoryType = this.$route.params.category
+        const newFilteredProducts = this.products.filter((product) => product.category.toLowerCase() === categoryType.toLowerCase())
+        this.filteredProducts = newFilteredProducts
+      }
+    }
+  },
   async created() {
     this.products = await this.fetchProducts()
     this.filteredProducts = [...this.products]

@@ -11,7 +11,7 @@ const routes = [
     props: true
   },
   {
-    path: "/category/:name",
+    path: "/category/:category",
     name: "CategoryProductsPage",
     component: ProductsPage,
     props: true
