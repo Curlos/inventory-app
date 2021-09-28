@@ -3,12 +3,14 @@
     <div className="productDetails">
       <img v-bind:src="product && product.imageURL || productObj.imageURL || 'https://upload.wikimedia.org/wikipedia/commons/8/84/Apple_Computer_Logo_rainbow.svg'" alt="Apple Logo" />
       <div className="productInfo">
-        <div className="productName">{{ product && product.name || productObj.name}}</div>
-        <div><span class="productInfoTitle">Price:</span> ${{ product && product.retailPrice || productObj.retailPrice }}</div>
-        <div><span class="productInfoTitle">Color:</span> {{ product && product.color || productObj.color }}</div>
-        <div><span class="productInfoTitle">Capacity:</span> {{ product && product.capacity || productObj.capacity }}</div>
-        <div><span class="productInfoTitle">Release Year:</span> {{ product && product.releaseYear || productObj.releaseYear }}</div>
-        <div>{{ product && product.description || productObj.description }}</div>
+        <div v-if="product && product.name || productObj.name" className="productName">{{ product && product.name || productObj.name}}</div>
+        <div v-if="product && product.retailPrice || productObj.retailPrice"><span class="productInfoTitle">Price:</span> ${{ product && product.retailPrice || productObj.retailPrice }}</div>
+        <div v-if="product && product.color || productObj.color"><span class="productInfoTitle">Color:</span> {{ product && product.color || productObj.color }}</div>
+        <div v-if="product && product.capacity || productObj.capacity"><span class="productInfoTitle">Capacity:</span> {{ product && product.capacity || productObj.capacity }}</div>
+
+        <div v-if="product && product.releaseYear || productObj.releaseYear"><span class="productInfoTitle">Release Year:</span> {{ product && product.releaseYear || productObj.releaseYear }}</div>
+
+        <div v-if="product && product.description || productObj.description">{{ product && product.description || productObj.description }}</div>
 
         <div v-if="!product">
           <router-link :to="'/edit-product/' + productObj._id || product._id" exact>
