@@ -1,9 +1,10 @@
 <template>
   <div className="pageContainer">
-    <form className="productFormContainer" @submit="handleFormSubmit">
-      <span class="formTitle">Add a new product</span>
+    <form className="productFormContainer">
+      <span class="formTitle" v-if="!this.$route.params.id">Add a new product</span>
+      <span class="formTitle" v-if="this.$route.params.id">Edit product</span>
       <input type="text" placeholder="Name*" name="name" v-model="newProduct.name" @change="handleFormChange"/>
-      <select name="category" selected="newProduct.category" @change="handleFormChange">
+      <select name="category" selected="newProduct.category" v-model="newProduct.category" @change="handleFormChange">
         <option value="selectCategory">Select category type</option>
         <option value="Mac">Mac</option>
         <option value="iPad">iPad</option>
@@ -13,8 +14,8 @@
         <option value="Music">Music</option>
       </select>
       <input type="number" placeholder="Price*" name="retailPrice" v-model="newProduct.retailPrice" @change="handleFormChange"/>
-      <input type="text" placeholder="Color" name="color" @change="handleFormChange"/>
-      <select name="capacity" selected="newProduct.capacity" @change="handleFormChange">
+      <input type="text" placeholder="Color" name="color" v-model="newProduct.color" @change="handleFormChange"/>
+      <select name="capacity" selected="newProduct.capacity" v-model="newProduct.capacity" @change="handleFormChange">
         <option value="selectCapacity">Select capacity (if applicable)</option>
         <option value="8GB">8GB</option>
         <option value="16GB">16GB</option>
@@ -26,10 +27,12 @@
         <option value="1TB">1TB</option>
         <option value="2TB">2TB</option>
       </select>
-      <input type="text" placeholder="Release Year" name="releaseYear" @change="handleFormChange"/>
+      <input type="text" placeholder="Release Year" name="releaseYear" v-model="newProduct.releaseYear" @change="handleFormChange"/>
       <textarea placeholder="Product description" name="description" v-model="newProduct.description" @change="handleFormChange"></textarea>
       <input type="text" placeholder="Image URL" name="imageURL" v-model="newProduct.imageURL" @change="handleFormChange"/>
-      <button type="submit" class="submitButton">Add new product</button>
+
+      <button @click="handleAddProduct" class="submitButton" v-if="!this.$route.params.id">Add new product</button>
+      <button @click="handleEditProduct" class="submitButton" v-if="this.$route.params.id">Edit product</button>
     </form>
 
     <ProductPage :product="newProduct"/>
@@ -65,11 +68,7 @@ export default {
     }
   },
   methods: {
-    async handleFormSubmit(e) {
-      e.preventDefault()
-      console.log('submitted')
-      const data = await this.addProduct()
-
+    clearFormData(data) {
       if (data) {
         console.log(data)
         this.newProduct = {
@@ -81,22 +80,32 @@ export default {
           capacity: 'Select capacity (if applicable)',
           description: '',
           imageURL: '',
+
         }
+
+        this.$router.push('/')
       } else {
         console.log('something went wrong')
       }
+    },
+    async handleAddProduct(e) {
+      e.preventDefault()
+      console.log('submitted')
+      const data = await this.addProduct()
+      this.clearFormData(data)
+    },
+    async handleEditProduct(e) {
+      e.preventDefault()
+      const id = this.$route.params.id
+      const data = await this.editProduct(id)
+      console.log(data)
+      this.clearFormData(data)
     },
     handleFormChange(e) {
       const productKey = e.target.name
       const productValue = e.target.value
       this.newProduct[productKey] = productValue
       console.log(this.newProduct)
-    },
-    async fetchProductByID(id) {
-      const res = await axios.get(this.API_BASE_URL + `/product/${id}`)
-      console.log(res)
-      const data = res.data
-      return data
     },
     async addProduct() {
       if (this.newProduct.capacity === 'Select capacity (if applicable)' || this.newProduct.capacity === 'selectCapacity' || this.newProduct.category === 'Select category type' || this.newProduct.category === 'selectCategory') {
@@ -107,8 +116,29 @@ export default {
       const res = await axios.post(this.API_BASE_URL + `/add`, body)
       const data = res.data
       return data
+    },
+    async fetchProductByID(id) {
+      const res = await axios.get(this.API_BASE_URL + `/product/${id}`)
+      console.log(res)
+      const data = res.data
+      return data
+    },
+    async editProduct(id) {
+      const body = {...this.newProduct}
+      console.log(this.API_BASE_URL + `/product/${id}`)
+      const res = await axios.put(this.API_BASE_URL + `/product/${id}`, body)
+      const data = res.data
+      return data
     }
   },
+  async created() {
+    if (this.$route.params.id) {
+      const id = this.$route.params.id
+      const currProduct = await this.fetchProductByID(id)
+      console.log(currProduct)
+      this.newProduct = currProduct
+    }
+  }
 
 }
 </script>
@@ -159,6 +189,7 @@ export default {
     border-radius: 15px;
     padding: 15px;
     width: 384px;
+    cursor: pointer;
 
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;

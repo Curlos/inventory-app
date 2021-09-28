@@ -12,8 +12,14 @@ const routes = [
   },
   {
     path: "/category/:name",
-    name: "ProductsPage",
+    name: "CategoryProductsPage",
     component: ProductsPage,
+    props: true
+  },
+  {
+    path: "/edit-product/:id",
+    name: "EditProductForm",
+    component: ProductForm,
     props: true
   },
   {

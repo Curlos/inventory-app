@@ -1,6 +1,6 @@
 <template>
   <div class="productContainer">
-    <router-link :to="'/product/' + product._id" >
+    <router-link :to="'/product/' + product._id" exact>
       <img v-bind:src="product.imageURL || 'https://upload.wikimedia.org/wikipedia/commons/8/84/Apple_Computer_Logo_rainbow.svg'" alt="Apple Logo" />
       <div class="productName">{{ product.name }}</div>
       <div>${{ product.retailPrice }}</div>
