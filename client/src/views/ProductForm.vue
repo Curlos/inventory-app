@@ -4,28 +4,19 @@
       <span class="formTitle" v-if="!this.$route.params.id">Add a new product</span>
       <span class="formTitle" v-if="this.$route.params.id">Edit product</span>
       <input type="text" placeholder="Name*" name="name" v-model="newProduct.name" @change="handleFormChange"/>
-      <select name="category" selected="newProduct.category" v-model="newProduct.category" @change="handleFormChange">
-        <option value="selectCategory">Select category type</option>
-        <option value="Mac">Mac</option>
-        <option value="iPad">iPad</option>
-        <option value="iPhone">iPhone</option>
-        <option value="Watch">Watch</option>
-        <option value="TV">TV</option>
-        <option value="Music">Music</option>
+      <select name="category" v-model="newProduct.category" @change="handleFormChange">
+        <option value="selectCapacity">Select category type</option>
+        <option :key="categoryValue" :value="categoryValue" v-for="categoryValue in categoryValues">
+          {{categoryValue}}
+        </option>
       </select>
       <input type="number" placeholder="Price*" name="retailPrice" v-model="newProduct.retailPrice" @change="handleFormChange"/>
       <input type="text" placeholder="Color" name="color" v-model="newProduct.color" @change="handleFormChange"/>
-      <select name="capacity" selected="newProduct.capacity" v-model="newProduct.capacity" @change="handleFormChange">
+      <select name="capacity" v-model="newProduct.capacity" @change="handleFormChange">
         <option value="selectCapacity">Select capacity (if applicable)</option>
-        <option value="8GB">8GB</option>
-        <option value="16GB">16GB</option>
-        <option value="32GB">32GB</option>
-        <option value="64GB">64GB</option>
-        <option value="128GB">128GB</option>
-        <option value="256GB">256GB</option>
-        <option value="512GB">512GB</option>
-        <option value="1TB">1TB</option>
-        <option value="2TB">2TB</option>
+        <option :key="capacityValue" :value="capacityValue" v-for="capacityValue in capacityValues">
+          {{capacityValue}}
+        </option>
       </select>
       <input type="text" placeholder="Release Year" name="releaseYear" v-model="newProduct.releaseYear" @change="handleFormChange"/>
       <textarea placeholder="Product description" name="description" v-model="newProduct.description" @change="handleFormChange"></textarea>
@@ -54,6 +45,8 @@ export default {
   data() {
     return {
       productObj: Object,
+      categoryValues: ['Mac', 'iPad', 'iPhone', 'Watch', 'TV', 'Music'],
+      capacityValues: ['8GB', '16GB', '32GB', '64GB', '128GB', '256GB', '512GB', '1TB', '2TB'],
       API_BASE_URL: 'http://localhost:8888/products',
       newProduct: {
         name: '',
@@ -108,8 +101,14 @@ export default {
       console.log(this.newProduct)
     },
     async addProduct() {
-      if (this.newProduct.capacity === 'Select capacity (if applicable)' || this.newProduct.capacity === 'selectCapacity' || this.newProduct.category === 'Select category type' || this.newProduct.category === 'selectCategory') {
-        console.log('FUCK')
+      if (this.newProduct.capacity === 'Select capacity (if applicable)' || this.newProduct.capacity === 'selectCapacity') {
+        this.newProduct = {...this.newProduct, capacity: ''}
+
+      } 
+      if (this.newProduct.category === 'Select category type' || this.newProduct.category === 'selectCategory') {
+         return false
+      }
+      if (this.newProduct.name === '' || this.newProduct.retailPrice === '') {
         return false
       }
       const body = {...this.newProduct}

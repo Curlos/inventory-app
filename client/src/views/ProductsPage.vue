@@ -55,6 +55,15 @@ export default {
       console.log(newFilteredProducts)
       
     },
+    filterByCategory() {
+      if (this.$route.params.category) {
+        const categoryType = this.$route.params.category
+        const newFilteredProducts = this.products.filter((product) => product.category.toLowerCase() === categoryType.toLowerCase())
+        this.filteredProducts = newFilteredProducts
+      } else {
+        this.filteredProducts = this.products
+      }
+    },
     async fetchProducts() {
       const res = await axios.get(this.API_BASE_URL)
       console.log(res)
@@ -72,18 +81,18 @@ export default {
   watch: {
     $route() {
       console.log(this.$route.params)
-      if (this.$route.params.category) {
-        const categoryType = this.$route.params.category
-        const newFilteredProducts = this.products.filter((product) => product.category.toLowerCase() === categoryType.toLowerCase())
-        this.filteredProducts = newFilteredProducts
-      } else {
-        this.filteredProducts = this.products
-      }
+      this.filterByCategory()
     }
   },
   async created() {
-    this.products = await this.fetchProducts()
-    this.filteredProducts = [...this.products]
+    const newProducts = await this.fetchProducts()
+    this.products = newProducts
+
+    if (this.$route.params.category) {
+      this.filterByCategory()
+    } else {
+      this.filteredProducts = [...this.products]
+    }
   },
 }
 </script>
@@ -92,7 +101,7 @@ export default {
 
 .searchAndAdd {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     margin: 10px;
   }
 
@@ -113,9 +122,10 @@ export default {
     border: none;
     border-radius: 20px;
     padding: 10px;
+    margin-left: 20px;
   }
   .searchAndAdd button:hover {
-    background-color: #969ea7;
+    background-color: #0059b3;
     cursor: pointer;
   }
 
