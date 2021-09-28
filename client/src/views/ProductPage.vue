@@ -1,7 +1,9 @@
 <template>
   <div className="productContainer">
     <div className="productDetails">
-      <img v-bind:src="product && product.imageURL || productObj.imageURL || 'https://upload.wikimedia.org/wikipedia/commons/8/84/Apple_Computer_Logo_rainbow.svg'" alt="Apple Logo" />
+      <div>
+        <img v-bind:src="product && product.imageURL || productObj.imageURL || 'https://upload.wikimedia.org/wikipedia/commons/8/84/Apple_Computer_Logo_rainbow.svg'" alt="Apple Logo" />
+      </div>
       <div className="productInfo">
         <div v-if="product && product.name || productObj.name" className="productName">{{ product && product.name || productObj.name}}</div>
         <div v-if="product && product.retailPrice || productObj.retailPrice"><span class="productInfoTitle">Price:</span> ${{ product && product.retailPrice || productObj.retailPrice }}</div>
@@ -71,11 +73,12 @@ export default {
 </script>
 
 <style scoped>
-  .productContainer {
+  .productDetails {
 
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    height: 100vh;
+    margin-top: 50px;
   }
   .productContainer img {
     height: 450px;
@@ -87,9 +90,6 @@ export default {
     align-items: center;
   }
   .productInfo {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
     padding: 50px;
     font-size: 20px;
@@ -123,5 +123,12 @@ export default {
 
   .deleteButton {
     background-color: #e40f00;
+  }
+
+  @media (max-width: 450px) {
+    .productContainer img {
+      max-width: 350px;
+      height: auto;
+    }
   }
 </style>

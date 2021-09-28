@@ -138,4 +138,10 @@ export default {
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
   }
+
+  @media (max-width: 450px) {
+    .searchAndAdd input[type="text"] {
+      max-width: 150px;
+    }
+  }
 </style>
